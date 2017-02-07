@@ -53,8 +53,10 @@ class ArticulosComponentNotYetConnected extends Component {
                                 leftAvatar={<Avatar src={v.PImagen} />}
                                 primaryText={`${v.Nombre} - $${money.format("EUR", money.floatToAmount(v.PrecioVenta))}`}
                                 secondaryText={v.Dimensiones}
-                                onClick={evt => this.props.RequestOneArticleAsync(v.Id)}
-                                />
+                                onClick={evt => {
+                                    this.props.RequestOneArticleAsync(v.Id);
+                                    this.props.ChangeUrl(`/articulos/${v.Id}`);
+                                }}/>
                         ))}
                     </List>
                 </Paper>
@@ -63,7 +65,7 @@ class ArticulosComponentNotYetConnected extends Component {
                         <ContentAdd/>
                     </FloatingActionButton>
                     {
-                        this.props.Current
+                        (this.props.Current && this.props.params.artId)
                             ? <ArticuloDetalleComponent 
                                 eliminar={this.eliminarExistente} 
                                 editar={this.editarExistente} 

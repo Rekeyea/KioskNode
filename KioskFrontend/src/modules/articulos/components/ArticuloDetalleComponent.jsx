@@ -13,7 +13,7 @@ export class ArticuloDetalleComponent extends Component {
             fontSize: "2rem"
         };
         const precioContainerStyle = {
-            width: "25%",
+            width: "20%",
             display: "inline-block"
         };
         const unitario = money.floatToAmount(this.props.articulo.PrecioUnitario);
@@ -64,9 +64,14 @@ export class ArticuloDetalleComponent extends Component {
                 <CardTitle
                     title={this.props.articulo.Nombre}
                     subtitle={this.props.articulo.Dimensiones}
-                />
+                >
+                </CardTitle>
                 <CardText>
                     <div style={{ width: "100%" }}>
+                        <div style={precioContainerStyle}>
+                            <label>Stock Disponible</label><br />
+                            <span style={precioStyle}>{this.props.articulo.Stock}</span>
+                        </div>
                         <div style={precioContainerStyle}>
                             <label>Precio de Compra</label><br />
                             <span style={precioStyle}>$ {money.format("EUR", unitario)}</span>

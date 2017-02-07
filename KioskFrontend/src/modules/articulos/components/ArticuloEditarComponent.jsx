@@ -28,10 +28,12 @@ class ArticuloEditarComponentNotYetConnected extends Component {
         Marca: ""
     };
     componentDidMount() {
-        this.props.RequestOneArticleAsync(this.props.params.artId);
+        if(this.props.params.artId){
+            this.props.RequestOneArticleAsync(this.props.params.artId);
+        }
     }
     componentWillReceiveProps(nextProps) {
-        if (this.state.isEdit) {
+        if (this.props.params.artId) {
             const articulo = nextProps.Article || this.defaultArticulo;
             this.setState({ articulo });
         }
@@ -114,6 +116,7 @@ class ArticuloEditarComponentNotYetConnected extends Component {
                 </div>
                 <div className="col-xs-12" style={{ height:"40px" }}>
                     <FlatButton style={{float:"right"}} onClick={this.save} label="Guardar" />
+                    <FlatButton style={{float:"right"}} onClick={evt => this.props.ChangeUrl(`/articulos/${this.props.params.artId}`)} label="Cancelar" />
                 </div>
             </div>
         );
