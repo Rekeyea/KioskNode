@@ -1,13 +1,9 @@
-import {NAME,LIST,SEARCH} from "./constants";
+import {NAME,LIST,SEARCH,CURRENT} from "./constants";
 import Fuse from "fuse.js";
 
-export const list = (state) => {
-    return state[NAME][LIST].map(v => {
-        const articulo = v;
-        articulo.imagen = articulo.imagen.indexOf("http") === -1 ? process.env.REACT_APP_API_URL + articulo.imagen : articulo.imagen;
-        return articulo;
-    });
-}
+export const list = (state) =>state[NAME][LIST];
+
+export const current = state => state[NAME][CURRENT];
 
 export const filter_list = state => {
     const text = state[NAME][SEARCH];
@@ -19,11 +15,11 @@ export const filter_list = state => {
             distance: 20,
             maxPatternLength: 32,
             keys: [
-                "nombre",
-                "tags",
-                "dimensiones",
-                "marca",
-                "barcode"
+                "Nombre",
+                "PTags",
+                "Dimensiones",
+                "Marca",
+                "Barcode"
             ]
         });
         const articulos = f.search(text);
@@ -33,6 +29,4 @@ export const filter_list = state => {
     }
 }
 
-export const get = state => id => {
-    return list(state).find(v => v.id === Number(id));
-}
+export const get = state => id => list(state).find(v => v.Id === Number(id));

@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
-import { RequestArticulosAsync, SetSearchCriteria, RequestDestroyArticuloAsync } from "./../actions";
-import { filter_list } from "./../selectors";
+import { 
+    RequestArticulosAsync, SetSearchCriteria, RequestDestroyArticuloAsync, RequestOneArticleAsync 
+} from "./../actions";
+import { filter_list, current } from "./../selectors";
 import { 
     FloatingActionButton, List, ListItem, Avatar, Subheader, Paper 
 } from "material-ui";
@@ -26,10 +28,17 @@ class ArticulosComponentNotYetConnected extends Component {
         this.props.ChangeUrl(`/construir-articulo/${id}`);
     };
     eliminarExistente = id => () => {
-        this.props.RequestDestroyArticuloAsync(id,() => {this.setState({articulo:undefined}); this.props.RequestArticulosAsync();});
+        this.props.RequestDestroyArticuloAsync(id,() => {
+            this.props.RequestArticulosAsync()
+            this.props.ChangeUrl("/articulos");
+        });
     }
     componentDidMount() {
         this.props.RequestArticulosAsync();
+        
+        if(this.props.params.artId){
+            this.props.RequestOneArticleAsync(this.props.params.artId);
+        }
     }
     render() {
         return (
@@ -41,10 +50,10 @@ class ArticulosComponentNotYetConnected extends Component {
                         {this.props.Articulos.map((v, i) => (
                             <ListItem
                                 key={i}
-                                leftAvatar={<Avatar src={v.imagen} />}
-                                primaryText={`${v.nombre} - $${money.format("EUR", money.floatToAmount(v.precioVenta))}`}
-                                secondaryText={v.dimensiones}
-                                onClick={evt => this.setState({ articulo: v, edit:false })}
+                                leftAvatar={<Avatar src={v.PImagen} />}
+                                primaryText={`${v.Nombre} - $${money.format("EUR", money.floatToAmount(v.PrecioVenta))}`}
+                                secondaryText={v.Dimensiones}
+                                onClick={evt => this.props.RequestOneArticleAsync(v.Id)}
                                 />
                         ))}
                     </List>
@@ -54,11 +63,11 @@ class ArticulosComponentNotYetConnected extends Component {
                         <ContentAdd/>
                     </FloatingActionButton>
                     {
-                        this.state.articulo
+                        this.props.Current
                             ? <ArticuloDetalleComponent 
                                 eliminar={this.eliminarExistente} 
                                 editar={this.editarExistente} 
-                                articulo={this.state.articulo}
+                                articulo={this.props.Current}
                                />
                             : null
                     }
@@ -71,7 +80,8 @@ class ArticulosComponentNotYetConnected extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        Articulos: filter_list(state)
+        Articulos: filter_list(state),
+        Current: current(state)
     };
 };
 
@@ -79,7 +89,8 @@ const mapActionsToProps = {
     RequestArticulosAsync,
     ChangeUrl : push,
     SetSearchCriteria,
-    RequestDestroyArticuloAsync
+    RequestDestroyArticuloAsync,
+    RequestOneArticleAsync
 };
 
 export const ArticulosComponent = connect(mapStateToProps, mapActionsToProps)(ArticulosComponentNotYetConnected);

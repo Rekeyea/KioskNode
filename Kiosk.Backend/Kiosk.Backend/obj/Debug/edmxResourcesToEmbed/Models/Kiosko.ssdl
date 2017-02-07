@@ -1,0 +1,166 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Kiosko.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2012" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="KioskoStoreContainer">
+    <EntitySet Name="Articulos" EntityType="Kiosko.Store.Articulos" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Proveedores" EntityType="Kiosko.Store.Proveedores" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Ventas" EntityType="Kiosko.Store.Ventas" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="VentaArticulos" EntityType="Kiosko.Store.VentaArticulos" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Facturas" EntityType="Kiosko.Store.Facturas" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="ProveedorArticulo" EntityType="Kiosko.Store.ProveedorArticulo" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="FK_ProveedorArticulo_Proveedor" Association="Kiosko.Store.FK_ProveedorArticulo_Proveedor">
+      <End Role="Proveedor" EntitySet="Proveedores" />
+      <End Role="ProveedorArticulo" EntitySet="ProveedorArticulo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ProveedorArticulo_Articulo" Association="Kiosko.Store.FK_ProveedorArticulo_Articulo">
+      <End Role="Articulo" EntitySet="Articulos" />
+      <End Role="ProveedorArticulo" EntitySet="ProveedorArticulo" />
+    </AssociationSet>
+    <AssociationSet Name="LineItemArticulo" Association="Kiosko.Store.LineItemArticulo">
+      <End Role="LineItem" EntitySet="VentaArticulos" />
+      <End Role="Articulo" EntitySet="Articulos" />
+    </AssociationSet>
+    <AssociationSet Name="VentaLineItem" Association="Kiosko.Store.VentaLineItem">
+      <End Role="Venta" EntitySet="Ventas" />
+      <End Role="LineItem" EntitySet="VentaArticulos" />
+    </AssociationSet>
+    <AssociationSet Name="FacturaProveedor" Association="Kiosko.Store.FacturaProveedor">
+      <End Role="Factura" EntitySet="Facturas" />
+      <End Role="Proveedor" EntitySet="Proveedores" />
+    </AssociationSet>
+    <AssociationSet Name="FacturaLineItem" Association="Kiosko.Store.FacturaLineItem">
+      <End Role="Factura" EntitySet="Facturas" />
+      <End Role="LineItem" EntitySet="VentaArticulos" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Articulos">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Nombre" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Dimensiones" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Tags" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="PrecioUnitario" Type="decimal" Nullable="false" />
+    <Property Name="PrecioVenta" Type="decimal" Nullable="false" />
+    <Property Name="Imagen" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Stock" Type="int" Nullable="false" />
+    <Property Name="Barcode" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Marca" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Proveedores">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Nombre" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="RUT" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="RazonSocial" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Imagen" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Ventas">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Date" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityType Name="VentaArticulos">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Cantidad" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="PrecioUnitario" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="VentaId" Type="int" Nullable="false" />
+    <Property Name="FacturaId" Type="int" Nullable="false" />
+    <Property Name="Articulo_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Facturas">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Date" Type="datetime" Nullable="false" />
+    <Property Name="Proveedor_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ProveedorArticulo">
+    <Key>
+      <PropertyRef Name="Proveedores_Id" />
+      <PropertyRef Name="Articulos_Id" />
+    </Key>
+    <Property Name="Proveedores_Id" Type="int" Nullable="false" />
+    <Property Name="Articulos_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="LineItemArticulo">
+    <End Role="LineItem" Type="Kiosko.Store.VentaArticulos" Multiplicity="*" />
+    <End Role="Articulo" Type="Kiosko.Store.Articulos" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Articulo">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="LineItem">
+        <PropertyRef Name="Articulo_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="VentaLineItem">
+    <End Role="Venta" Type="Kiosko.Store.Ventas" Multiplicity="1" />
+    <End Role="LineItem" Type="Kiosko.Store.VentaArticulos" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Venta">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="LineItem">
+        <PropertyRef Name="VentaId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FacturaProveedor">
+    <End Role="Factura" Type="Kiosko.Store.Facturas" Multiplicity="*" />
+    <End Role="Proveedor" Type="Kiosko.Store.Proveedores" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Proveedor">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Factura">
+        <PropertyRef Name="Proveedor_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FacturaLineItem">
+    <End Role="Factura" Type="Kiosko.Store.Facturas" Multiplicity="1" />
+    <End Role="LineItem" Type="Kiosko.Store.VentaArticulos" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Factura">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="LineItem">
+        <PropertyRef Name="FacturaId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ProveedorArticulo_Proveedor">
+    <End Role="Proveedor" Type="Kiosko.Store.Proveedores" Multiplicity="1" />
+    <End Role="ProveedorArticulo" Type="Kiosko.Store.ProveedorArticulo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Proveedor">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ProveedorArticulo">
+        <PropertyRef Name="Proveedores_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ProveedorArticulo_Articulo">
+    <End Role="ProveedorArticulo" Type="Kiosko.Store.ProveedorArticulo" Multiplicity="*" />
+    <End Role="Articulo" Type="Kiosko.Store.Articulos" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Articulo">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ProveedorArticulo">
+        <PropertyRef Name="Articulos_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

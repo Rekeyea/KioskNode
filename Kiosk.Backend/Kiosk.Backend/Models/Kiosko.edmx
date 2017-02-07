@@ -1,0 +1,403 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Kiosko.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2012" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="KioskoStoreContainer">
+    <EntitySet Name="Articulos" EntityType="Kiosko.Store.Articulos" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Proveedores" EntityType="Kiosko.Store.Proveedores" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Ventas" EntityType="Kiosko.Store.Ventas" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="VentaArticulos" EntityType="Kiosko.Store.VentaArticulos" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Facturas" EntityType="Kiosko.Store.Facturas" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="ProveedorArticulo" EntityType="Kiosko.Store.ProveedorArticulo" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="FK_ProveedorArticulo_Proveedor" Association="Kiosko.Store.FK_ProveedorArticulo_Proveedor">
+      <End Role="Proveedor" EntitySet="Proveedores" />
+      <End Role="ProveedorArticulo" EntitySet="ProveedorArticulo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ProveedorArticulo_Articulo" Association="Kiosko.Store.FK_ProveedorArticulo_Articulo">
+      <End Role="Articulo" EntitySet="Articulos" />
+      <End Role="ProveedorArticulo" EntitySet="ProveedorArticulo" />
+    </AssociationSet>
+    <AssociationSet Name="LineItemArticulo" Association="Kiosko.Store.LineItemArticulo">
+      <End Role="LineItem" EntitySet="VentaArticulos" />
+      <End Role="Articulo" EntitySet="Articulos" />
+    </AssociationSet>
+    <AssociationSet Name="VentaLineItem" Association="Kiosko.Store.VentaLineItem">
+      <End Role="Venta" EntitySet="Ventas" />
+      <End Role="LineItem" EntitySet="VentaArticulos" />
+    </AssociationSet>
+    <AssociationSet Name="FacturaProveedor" Association="Kiosko.Store.FacturaProveedor">
+      <End Role="Factura" EntitySet="Facturas" />
+      <End Role="Proveedor" EntitySet="Proveedores" />
+    </AssociationSet>
+    <AssociationSet Name="FacturaLineItem" Association="Kiosko.Store.FacturaLineItem">
+      <End Role="Factura" EntitySet="Facturas" />
+      <End Role="LineItem" EntitySet="VentaArticulos" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Articulos">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Nombre" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Dimensiones" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Tags" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="PrecioUnitario" Type="decimal" Nullable="false" />
+    <Property Name="PrecioVenta" Type="decimal" Nullable="false" />
+    <Property Name="Imagen" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Stock" Type="int" Nullable="false" />
+    <Property Name="Barcode" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Marca" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Proveedores">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Nombre" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="RUT" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="RazonSocial" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Imagen" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Ventas">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Date" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityType Name="VentaArticulos">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Cantidad" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="PrecioUnitario" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="VentaId" Type="int" Nullable="false" />
+    <Property Name="FacturaId" Type="int" Nullable="false" />
+    <Property Name="Articulo_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Facturas">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Date" Type="datetime" Nullable="false" />
+    <Property Name="Proveedor_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ProveedorArticulo">
+    <Key>
+      <PropertyRef Name="Proveedores_Id" />
+      <PropertyRef Name="Articulos_Id" />
+    </Key>
+    <Property Name="Proveedores_Id" Type="int" Nullable="false" />
+    <Property Name="Articulos_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="LineItemArticulo">
+    <End Role="LineItem" Type="Kiosko.Store.VentaArticulos" Multiplicity="*" />
+    <End Role="Articulo" Type="Kiosko.Store.Articulos" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Articulo">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="LineItem">
+        <PropertyRef Name="Articulo_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="VentaLineItem">
+    <End Role="Venta" Type="Kiosko.Store.Ventas" Multiplicity="1" />
+    <End Role="LineItem" Type="Kiosko.Store.VentaArticulos" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Venta">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="LineItem">
+        <PropertyRef Name="VentaId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FacturaProveedor">
+    <End Role="Factura" Type="Kiosko.Store.Facturas" Multiplicity="*" />
+    <End Role="Proveedor" Type="Kiosko.Store.Proveedores" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Proveedor">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Factura">
+        <PropertyRef Name="Proveedor_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FacturaLineItem">
+    <End Role="Factura" Type="Kiosko.Store.Facturas" Multiplicity="1" />
+    <End Role="LineItem" Type="Kiosko.Store.VentaArticulos" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Factura">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="LineItem">
+        <PropertyRef Name="FacturaId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ProveedorArticulo_Proveedor">
+    <End Role="Proveedor" Type="Kiosko.Store.Proveedores" Multiplicity="1" />
+    <End Role="ProveedorArticulo" Type="Kiosko.Store.ProveedorArticulo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Proveedor">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ProveedorArticulo">
+        <PropertyRef Name="Proveedores_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ProveedorArticulo_Articulo">
+    <End Role="ProveedorArticulo" Type="Kiosko.Store.ProveedorArticulo" Multiplicity="*" />
+    <End Role="Articulo" Type="Kiosko.Store.Articulos" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Articulo">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ProveedorArticulo">
+        <PropertyRef Name="Articulos_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="Kiosko" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
+        <EntityContainer Name="KioskoContainer" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Articulos" EntityType="Kiosko.Articulo" />
+          <EntitySet Name="Proveedores" EntityType="Kiosko.Proveedor" />
+          <AssociationSet Name="ProveedorArticulo" Association="Kiosko.ProveedorArticulo">
+            <End Role="Proveedor" EntitySet="Proveedores" />
+            <End Role="Articulo" EntitySet="Articulos" />
+          </AssociationSet>
+          <EntitySet Name="Ventas" EntityType="Kiosko.Venta" />
+          <EntitySet Name="VentaArticulos" EntityType="Kiosko.LineItem" />
+          <AssociationSet Name="LineItemArticulo" Association="Kiosko.LineItemArticulo">
+            <End Role="LineItem" EntitySet="VentaArticulos" />
+            <End Role="Articulo" EntitySet="Articulos" />
+          </AssociationSet>
+          <AssociationSet Name="VentaLineItem" Association="Kiosko.VentaLineItem">
+            <End Role="Venta" EntitySet="Ventas" />
+            <End Role="LineItem" EntitySet="VentaArticulos" />
+          </AssociationSet>
+          <EntitySet Name="Facturas" EntityType="Kiosko.Factura" />
+          <AssociationSet Name="FacturaProveedor" Association="Kiosko.FacturaProveedor">
+            <End Role="Factura" EntitySet="Facturas" />
+            <End Role="Proveedor" EntitySet="Proveedores" />
+          </AssociationSet>
+          <AssociationSet Name="FacturaLineItem" Association="Kiosko.FacturaLineItem">
+            <End Role="Factura" EntitySet="Facturas" />
+            <End Role="LineItem" EntitySet="VentaArticulos" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Articulo">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" Nullable="false" />
+          <Property Name="Dimensiones" Type="String" Nullable="false" />
+          <Property Name="Tags" Type="String" Nullable="false" />
+          <Property Name="PrecioUnitario" Type="Decimal" Nullable="false" />
+          <Property Name="PrecioVenta" Type="Decimal" Nullable="false" />
+          <Property Name="Imagen" Type="String" Nullable="false" />
+          <Property Name="Stock" Type="Int32" Nullable="false" />
+          <Property Name="Barcode" Type="String" Nullable="false" />
+          <Property Name="Marca" Type="String" Nullable="false" />
+          <NavigationProperty Name="Proveedores" Relationship="Kiosko.ProveedorArticulo" FromRole="Articulo" ToRole="Proveedor" />
+          <NavigationProperty Name="LineItems" Relationship="Kiosko.LineItemArticulo" FromRole="Articulo" ToRole="LineItem" />
+        </EntityType>
+        <EntityType Name="Proveedor">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" Nullable="false" />
+          <Property Name="RUT" Type="String" Nullable="false" />
+          <Property Name="RazonSocial" Type="String" Nullable="false" />
+          <NavigationProperty Name="Articulos" Relationship="Kiosko.ProveedorArticulo" FromRole="Proveedor" ToRole="Articulo" />
+          <Property Name="Imagen" Type="String" Nullable="false" />
+          <NavigationProperty Name="Facturas" Relationship="Kiosko.FacturaProveedor" FromRole="Proveedor" ToRole="Factura" />
+        </EntityType>
+        <Association Name="ProveedorArticulo">
+          <End Type="Kiosko.Proveedor" Role="Proveedor" Multiplicity="*" />
+          <End Type="Kiosko.Articulo" Role="Articulo" Multiplicity="*" />
+        </Association>
+        <EntityType Name="Venta">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="LineItems" Relationship="Kiosko.VentaLineItem" FromRole="Venta" ToRole="LineItem" />
+          <Property Name="Date" Type="DateTime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="LineItem">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Cantidad" Type="String" Nullable="false" />
+          <Property Name="PrecioUnitario" Type="String" Nullable="false" />
+          <NavigationProperty Name="Articulo" Relationship="Kiosko.LineItemArticulo" FromRole="LineItem" ToRole="Articulo" />
+          <NavigationProperty Name="Venta" Relationship="Kiosko.VentaLineItem" FromRole="LineItem" ToRole="Venta" />
+          <Property Name="VentaId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Factura" Relationship="Kiosko.FacturaLineItem" FromRole="LineItem" ToRole="Factura" />
+          <Property Name="FacturaId" Type="Int32" Nullable="false" />
+        </EntityType>
+        <Association Name="LineItemArticulo">
+          <End Type="Kiosko.LineItem" Role="LineItem" Multiplicity="*" />
+          <End Type="Kiosko.Articulo" Role="Articulo" Multiplicity="1" />
+        </Association>
+        <Association Name="VentaLineItem">
+          <End Type="Kiosko.Venta" Role="Venta" Multiplicity="1" />
+          <End Type="Kiosko.LineItem" Role="LineItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Venta">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="LineItem">
+              <PropertyRef Name="VentaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Factura">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Date" Type="DateTime" Nullable="false" />
+          <NavigationProperty Name="Proveedor" Relationship="Kiosko.FacturaProveedor" FromRole="Factura" ToRole="Proveedor" />
+          <NavigationProperty Name="LineItems" Relationship="Kiosko.FacturaLineItem" FromRole="Factura" ToRole="LineItem" />
+        </EntityType>
+        <Association Name="FacturaProveedor">
+          <End Type="Kiosko.Factura" Role="Factura" Multiplicity="*" />
+          <End Type="Kiosko.Proveedor" Role="Proveedor" Multiplicity="1" />
+        </Association>
+        <Association Name="FacturaLineItem">
+          <End Type="Kiosko.Factura" Role="Factura" Multiplicity="1" />
+          <End Type="Kiosko.LineItem" Role="LineItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Factura">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="LineItem">
+              <PropertyRef Name="FacturaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="KioskoStoreContainer" CdmEntityContainer="KioskoContainer">
+    <EntitySetMapping Name="Articulos">
+      <EntityTypeMapping TypeName="IsTypeOf(Kiosko.Articulo)">
+        <MappingFragment StoreEntitySet="Articulos">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+          <ScalarProperty Name="Dimensiones" ColumnName="Dimensiones" />
+          <ScalarProperty Name="Tags" ColumnName="Tags" />
+          <ScalarProperty Name="PrecioUnitario" ColumnName="PrecioUnitario" />
+          <ScalarProperty Name="PrecioVenta" ColumnName="PrecioVenta" />
+          <ScalarProperty Name="Imagen" ColumnName="Imagen" />
+          <ScalarProperty Name="Stock" ColumnName="Stock" />
+          <ScalarProperty Name="Barcode" ColumnName="Barcode" />
+          <ScalarProperty Name="Marca" ColumnName="Marca" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Proveedores">
+      <EntityTypeMapping TypeName="IsTypeOf(Kiosko.Proveedor)">
+        <MappingFragment StoreEntitySet="Proveedores">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+          <ScalarProperty Name="RUT" ColumnName="RUT" />
+          <ScalarProperty Name="RazonSocial" ColumnName="RazonSocial" />
+          <ScalarProperty Name="Imagen" ColumnName="Imagen" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Ventas">
+      <EntityTypeMapping TypeName="IsTypeOf(Kiosko.Venta)">
+        <MappingFragment StoreEntitySet="Ventas">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Date" ColumnName="Date" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="VentaArticulos">
+      <EntityTypeMapping TypeName="IsTypeOf(Kiosko.LineItem)">
+        <MappingFragment StoreEntitySet="VentaArticulos">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Cantidad" ColumnName="Cantidad" />
+          <ScalarProperty Name="PrecioUnitario" ColumnName="PrecioUnitario" />
+          <ScalarProperty Name="VentaId" ColumnName="VentaId" />
+          <ScalarProperty Name="FacturaId" ColumnName="FacturaId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Facturas">
+      <EntityTypeMapping TypeName="IsTypeOf(Kiosko.Factura)">
+        <MappingFragment StoreEntitySet="Facturas">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Date" ColumnName="Date" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="ProveedorArticulo" TypeName="Kiosko.ProveedorArticulo" StoreEntitySet="ProveedorArticulo">
+      <EndProperty Name="Proveedor">
+        <ScalarProperty Name="Id" ColumnName="Proveedores_Id" />
+      </EndProperty>
+      <EndProperty Name="Articulo">
+        <ScalarProperty Name="Id" ColumnName="Articulos_Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="LineItemArticulo" TypeName="Kiosko.LineItemArticulo" StoreEntitySet="VentaArticulos">
+      <EndProperty Name="Articulo">
+        <ScalarProperty Name="Id" ColumnName="Articulo_Id" />
+      </EndProperty>
+      <EndProperty Name="LineItem">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="FacturaProveedor" TypeName="Kiosko.FacturaProveedor" StoreEntitySet="Facturas">
+      <EndProperty Name="Proveedor">
+        <ScalarProperty Name="Id" ColumnName="Proveedor_Id" />
+      </EndProperty>
+      <EndProperty Name="Factura">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+  </EntityContainerMapping>
+</Mapping></edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <edmx:Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </edmx:Connection>
+    <edmx:Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+        <DesignerProperty Name="UseLegacyProvider" Value="False" />
+      </DesignerInfoPropertySet>
+    </edmx:Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

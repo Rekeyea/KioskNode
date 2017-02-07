@@ -4,7 +4,7 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 import {store} from "./state";
 import { Provider } from 'react-redux';
 import { Router, Route, browserHistory, IndexRoute } from 'react-router';
-import {Root,Articulos,ConstruirArticulo,Proveedores} from "./Routes";
+import {Root,Articulos,Articulo,ConstruirArticulo,Proveedores} from "./Routes";
 import {RootComponent} from "./modules/root/components";
 import {ArticulosComponent,ArticuloEditarComponent} from "./modules/articulos/components";
 import {MasterComponent} from "./modules/master/components";
@@ -24,6 +24,7 @@ ReactDOM.render(
         <Route path={Root} component={MasterComponent}>
           <IndexRoute component={RootComponent}/>
           <Route path={Articulos} component={ArticulosComponent}/>
+          <Route path={Articulo} component={ArticulosComponent}/>
           <Route path={ConstruirArticulo} component={ArticuloEditarComponent}/>
         </Route>
       </Router>

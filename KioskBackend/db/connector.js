@@ -1,12 +1,8 @@
 const Sequelize = require("sequelize");
 
-exports.connector = new Sequelize("kiosko","root","root",{
+// exports.connector = new Sequelize("Server=DESKTOP-6Q95IEM\SQLEXPRESS");
+
+exports.connector = new Sequelize("kiosk","kiosko","kiosko",{
     host:"localhost",
-    dialect:"sqlite",
-    pool:{
-        max:5,
-        min:0,
-        idle:10000
-    },
-    storage:"./kiosko.db"
+    dialect:"mssql"
 });
